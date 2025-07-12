@@ -1,0 +1,25 @@
+{
+  "name": "awandai",
+  "version": "0.0.1",
+  "description": "Front-end for A.I. service. AI For Thai!",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chayapan/ai25-quiz.git"
+  },
+  "keywords": [
+    "AI",
+    "Thai",
+    "LLM",
+    "API"
+  ],
+  "author": "Team Awandai",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/chayapan/ai25-quiz/issues"
+  },
+  "homepage": "https://github.com/chayapan/ai25-quiz#readme"
+}

@@ -1,0 +1,36 @@
+version: '3.5'
+services:
+  api1:
+    container_name: api1
+    build: .
+    image: postgres:16
+    volumes:
+      - type: volume
+        source: api1-logs
+        target: /logs
+    ports:
+      - "8001:8000"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+  api2:
+    container_name: api2
+    build: .
+    image: postgres:16
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - type: volume
+        source: api2-data
+        target: /logs
+    ports:
+      - "8002:8000"
+    environment:
+      - POSTGRES_NAME=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+    depends_on:
+      - db
+volumes:
+  api1-logs:
+  api2-logs:

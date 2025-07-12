@@ -1,14 +1,43 @@
 # ai25-quiz: Awandai Team
 
-
-https://aift.hackathon2025.ai.in.th/
+| Service | Port | Description |
+| API 1 | 8001 |  |
+| API 2 | 8002 |  |
+| Web / Middleware | 8080 |  |
+| Caching / Front-end |  |  |
+| RDBMS / Persistent-Layer |  |  |
 
 
 ## API 1
 
 * Go or Flask. This solution provides Go and Flask reference implementation. Request from HTTP is logged to [logs/api1.log]()
 
+
+```
+cd api1
+```
+
+Flask
+
+```
+python3 app.py
+```
+
+
+Go
+
+```
+go run main.go
+```
+
+
 ## API 2
+
+```
+python3 -m pip install fastapi[standard]
+```
+
+Documentation at http://127.0.0.1:8002/docs
 
 
 ## Web
@@ -33,6 +62,7 @@ logs/
 # About
 
 การแข่งขัน Hackathon 2025: From AI Model to Service on AI FOR THAI
+https://aift.hackathon2025.ai.in.th/
 
 
 Checklist per quiz  
