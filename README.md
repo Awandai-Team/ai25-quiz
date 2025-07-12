@@ -1,5 +1,12 @@
 # ai25-quiz: Awandai Team
 
+Start API service.
+
+```
+docker-compose up -d
+docker ps
+```
+
 | Service                | Port | Description             |
 |------------------------|------|-------------------------|
 | API 1                  | 8001 | Backend API service     |
@@ -9,12 +16,9 @@
 | RDBMS / Persistent-Layer |    | Database service        |
 
 
-Start API service.
+TODO:
 
-```
-docker-compose up -d
-docker ps
-```
+How-to Test ...
 
 
 ## API 1
