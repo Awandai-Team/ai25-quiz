@@ -1,11 +1,20 @@
 # ai25-quiz: Awandai Team
 
-| Service | Port | Description |
-| API 1 | 8001 |  |
-| API 2 | 8002 |  |
-| Web / Middleware | 8080 |  |
-| Caching / Front-end |  |  |
-| RDBMS / Persistent-Layer |  |  |
+| Service                | Port | Description             |
+|------------------------|------|-------------------------|
+| API 1                  | 8001 | Backend API service     |
+| API 2                  | 8002 | Backend API service     |
+| Web / Middleware       | 8080 | Web server or gateway   |
+| Caching / Front-end    |      | Cache layer or frontend |
+| RDBMS / Persistent-Layer |    | Database service        |
+
+
+Start API service.
+
+```
+docker-compose up -d
+docker ps
+```
 
 
 ## API 1
