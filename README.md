@@ -79,12 +79,12 @@ https://docs.google.com/document/d/14XtBFMgx39MWxpmtZ9_s5qtfIMzIz8ezCy6Wqeurt4Y/
 
 Question/Task:
 
-  [ ] จงสร้าง API 2 ตัว  โดยมีเงื่อนไขดังนี้
-  [ ] สร้างโดยภาษาไดก็ได้
-  [ ] Listen ที่ port ไดก็ได้
+  [/ ] จงสร้าง API 2 ตัว  โดยมีเงื่อนไขดังนี้
+  [/ ] สร้างโดยภาษาไดก็ได้
+  [/ ] Listen ที่ port ไดก็ได้
   [ ] User Request ไปที่ API1 แล้ว API 1 request ต่อไปที่ API2 แล้วนำคำตอบส่งกลับไปที่ User
   [ ] มีการ Print logs ทั้งบน API1 และ 2
   [ ] endpoint ของ  api และคำตอบ จะเป็นอะไรก็ได้ แค่ print hello world ก็ได้
-  [ ] deploy ทุกอย่างบน docker-compose.yml
-  [ ] ส่งงานผ่าน github หรือ gitlab เปิด public access
-  [ ] เขียน Readme.md บอกวิธี  deploy และทดสอบ
+  [/ ] deploy ทุกอย่างบน docker-compose.yml
+  [/ ] ส่งงานผ่าน github หรือ gitlab เปิด public access
+  [? ] เขียน Readme.md บอกวิธี  deploy และทดสอบ
