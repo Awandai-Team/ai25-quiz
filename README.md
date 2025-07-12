@@ -6,7 +6,7 @@ https://aift.hackathon2025.ai.in.th/
 
 ## API 1
 
-* Go or Flask. This solution provides Go and Flask reference implementation. Request from HTTP is logged to [](logs/api1.log)
+* Go or Flask. This solution provides Go and Flask reference implementation. Request from HTTP is logged to [logs/api1.log]()
 
 ## API 2
 
