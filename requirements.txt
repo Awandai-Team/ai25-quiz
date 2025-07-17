@@ -1,2 +1,7 @@
+fastapi
+flask
+protobuff==6.3.1
 Pydantic
-protobuff
+pandas
+statsmodel
+flask
