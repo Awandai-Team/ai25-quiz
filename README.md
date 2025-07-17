@@ -1,7 +1,9 @@
 # ai25-quiz: Awandai Team
 
-Team: Awandai
-Problem: Quiz
+Team: Awandai  ( @tawanNophaket , @Dai5onda , @chayapan )
+Solution: Quiz
+
+
 
 การแข่งขัน Hackathon 2025: From AI Model to Service on AI FOR THAI
 https://aift.hackathon2025.ai.in.th/
