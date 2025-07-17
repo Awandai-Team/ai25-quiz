@@ -1,6 +1,12 @@
 # ai25-quiz: Awandai Team
 
+Team: Awandai
+Problem: Quiz
 
+การแข่งขัน Hackathon 2025: From AI Model to Service on AI FOR THAI
+https://aift.hackathon2025.ai.in.th/
+
+## Deploy
 
 Start API service.
 
@@ -78,20 +84,10 @@ logs/
 The web layer. Node.js or Django or PHP. This provides user session to interact with the service.
 
 
-# Console
+[//]: # # Console
+[//]: # ![[AWS Cloud Shell](https://aws.amazon.com/cloudshell/faqs/#topic-1){:target="_blank"}](https://avatars.githubusercontent.com/u/2232217?s=200&v=4)  ![Google Cloud Platform](https://avatars.githubusercontent.com/u/2810941?s=200&v=4){:target="_blank"}  [//]: # ![Azure Bastion](https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png){:target="_blank"} 
+[//]: # https://cloud.google.com/free  
+[//]: # https://aws.amazon.com/free/  
+[//]: # https://azure.microsoft.com/en-us/products/azure-bastion  
 
 
-![AWS Cloud Shell](https://avatars.githubusercontent.com/u/2232217?s=200&v=4) ![Google Cloud Platform](https://avatars.githubusercontent.com/u/2810941?s=200&v=4) ![Azure Bastion](https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png)
-
-https://cloud.google.com/free  
-https://aws.amazon.com/free/  
-https://aws.amazon.com/cloudshell/faqs/#topic-1  
-https://azure.microsoft.com/en-us/products/azure-bastion  
-
-
-# About
-
-การแข่งขัน Hackathon 2025: From AI Model to Service on AI FOR THAI
-https://aift.hackathon2025.ai.in.th/
-
-Team: Awandai
