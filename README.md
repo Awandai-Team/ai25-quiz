@@ -1,17 +1,6 @@
 # ai25-quiz: Awandai Team
 
 
-AWS Cloud Shell https://aws.amazon.com/cloudshell/faqs/#topic-1
-https://aws.amazon.com/free/
-https://avatars.githubusercontent.com/u/2232217?s=200&v=4 
-
-Google Cloud Platform https://cloud.google.com/free
-https://avatars.githubusercontent.com/u/2810941?s=200&v=4
-
-Azure Bastion
-https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png
-https://azure.microsoft.com/en-us/products/azure-bastion
-
 
 Start API service.
 
@@ -84,6 +73,17 @@ logs/
   inference.log
   hourly.log
 ```
+
+## Shell
+
+
+![AWS Cloud Shell](https://avatars.githubusercontent.com/u/2232217?s=200&v=4) ![Google Cloud Platform](https://avatars.githubusercontent.com/u/2810941?s=200&v=4) ![Azure Bastion](https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png)
+
+https://aws.amazon.com/cloudshell/faqs/#topic-1
+https://aws.amazon.com/free/
+https://cloud.google.com/free
+https://azure.microsoft.com/en-us/products/azure-bastion
+
 
 # About
 
