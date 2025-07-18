@@ -1,0 +1,4 @@
+# pytorch
+pydantic
+fastapi[standard]
+transformers
