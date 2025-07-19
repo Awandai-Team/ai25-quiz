@@ -7,6 +7,8 @@ pandas
 requests
 uvicorn
 aift
+pythainlp==5.1.2
+transformers[torch]
 # Optional dependencies for additional functionality
 # statsmodel
 # scikit-learn
