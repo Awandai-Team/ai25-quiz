@@ -83,4 +83,4 @@ logs/
 
 # Web
 
-The web layer can use Node.js or Django or PHP or Java. The web component provides session and authetication for end-user. See [instruction](web/README.md).
+The web layer can use Node.js or Django or PHP or Java. The web component provides session and authetication for end-user. See [instruction](master/web/README.md).
