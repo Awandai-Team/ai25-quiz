@@ -1,7 +1,11 @@
 fastapi
 flask
-protobuff==6.3.1
+lightprotobuf
 Pydantic
 pandas
-statsmodel
-flask
+# Optional dependencies for additional functionality
+# statsmodel
+# uvicorn
+# scikit-learn
+# numpy
+# scipy

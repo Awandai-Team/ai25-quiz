@@ -1,14 +1,22 @@
 from fastapi import FastAPI
-import asyncio
+import logging
 
-app = FastAPI()
+app = FastAPI()  # สร้างเเอปฟลิเคชัน FastAPI
 
-@app.get("/")
-async def read_root():
-    await asyncio.sleep(1)  # Simulates an async I/O operation
-    return {"message": "Hello, Async World!"}
+# Config เเสดงผล Log เป็นระดับ INFO (ข้อมูลทั่วไป)
+# จัด format (ดึง เวลา, ชื่อระดับ, ข้อความหลัก)
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - API2 - %(levelname)s - %(message)s"
+)
 
-@app.get("/items/{item_id}")
-async def read_item(item_id: int, delay: int = 2):
-    await asyncio.sleep(delay)  # Simulate I/O delay
-    return {"item_id": item_id, "status": f"delayed for {delay} seconds"}
+
+@app.get("/health")  # สร้าง endpoint ไปที่ path "/health"
+def read_root():
+
+    # เมื่อมี Request มาที่ endpoint นี้ จะทำงาน
+    logging.info(
+        "Request received. Sending response."
+    )  # Log เพื่อยืนยัน Status ว่า service นี้ถูกเรียกเเล้ว
+
+    # ส่ง JSON response
+    return {"message": "Hello from API2", "status": "ok"}

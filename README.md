@@ -26,9 +26,15 @@ docker ps
 | RDBMS / Persistent-Layer |    | Database service        |
 
 
-TODO:
+# Test
 
-How-to Test ...
+To test this deployment.
+
+```
+docker-compose up -d
+docker-compose ps
+pytest
+```
 
 
 ## API 1
@@ -83,13 +89,4 @@ logs/
 
 # Web
 
-The web layer. Node.js or Django or PHP. This provides user session to interact with the service.
-
-
-[//]: # # Console
-[//]: # ![[AWS Cloud Shell](https://aws.amazon.com/cloudshell/faqs/#topic-1){:target="_blank"}](https://avatars.githubusercontent.com/u/2232217?s=200&v=4)  ![Google Cloud Platform](https://avatars.githubusercontent.com/u/2810941?s=200&v=4){:target="_blank"}  [//]: # ![Azure Bastion](https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png){:target="_blank"} 
-[//]: # https://cloud.google.com/free  
-[//]: # https://aws.amazon.com/free/  
-[//]: # https://azure.microsoft.com/en-us/products/azure-bastion  
-
-
+The web layer can use Node.js or Django or PHP or Java. The web component provides session and authetication for end-user. See [instruction](master/web/README.md).
