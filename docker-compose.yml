@@ -22,7 +22,7 @@ services:
     volumes:
       - ./logs:/logs
       - type: volume
-        source: api2-logs
+        source: api2-data
         target: /logs
     ports:
       - "8000:8000"
