@@ -30,4 +30,4 @@ EXPOSE 8000
 
 # Set entrypoint to run FastAPI in dev mode
 #   python -m fastapi dev api2_simple.py
-ENTRYPOINT ["python", "-m", "fastapi", "dev", "api2_simple.py"]
+ENTRYPOINT ["python", "-m", "fastapi", "dev", "api2_simple.py", "--host", "0.0.0.0"]
