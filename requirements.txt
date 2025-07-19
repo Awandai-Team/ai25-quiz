@@ -3,9 +3,9 @@ flask
 lightprotobuf
 Pydantic
 pandas
-statsmodel
-uvicorn
-scikit-learn
-numpy
-scipy
 # Optional dependencies for additional functionality
+# statsmodel
+# uvicorn
+# scikit-learn
+# numpy
+# scipy
