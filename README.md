@@ -26,9 +26,15 @@ docker ps
 | RDBMS / Persistent-Layer |    | Database service        |
 
 
-TODO:
+# Test
 
-How-to Test ...
+To test this deployment.
+
+```
+docker-compose up -d
+docker-compose ps
+pytest
+```
 
 
 ## API 1
