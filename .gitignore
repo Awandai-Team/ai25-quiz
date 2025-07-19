@@ -1,3 +1,5 @@
 .DS_Store
 logs/*.log
 test_report.xml
+api1/logs/
+api2/logs/

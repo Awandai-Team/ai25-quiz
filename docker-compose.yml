@@ -1,43 +1,43 @@
-version: "3.5"
 services:
-  api1:
-    container_name: api1
-    build: api1/.
+  frontend:
+    image: nginx:alpine
+    container_name: frontend_server
+    ports:
+      - "8080:80"
     volumes:
-      - ./logs:/logs
-      - type: volume
-        source: api1-data
-        target: /data
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - api1
+      - api2
+    networks:
+      - app-network
+
+  api1:
+    container_name: api1_go
+    build:
+      context: ./api1
+      dockerfile: Dockerfile
     ports:
       - "8001:8001"
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PW}
-    depends_on:
-      - cache
-  api2:
-    container_name: api2
-    build: api2/.
+      - API2_URL=http://api2:8002
     volumes:
-      - ./logs:/logs
-      - type: volume
-        source: api2-data
-        target: /logs
-    ports:
-      - "8002:8000"
-    environment:
-      - POSTGRES_NAME=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - ./api1/logs:/app/logs
+    networks:
+      - app-network
     depends_on:
-      - api1
-  cache:
-    container_name: redis1
-    image: redis
-    # command: python manage.py runserver 0.0.0.0:8000
+      - api2
+
+  api2:
+    container_name: api2_fastapi
+    build: ./api2
     ports:
-      - 6379:6379
-volumes:
-  api1-data:
-  api2-data:
+      - "8002:8002"
+    volumes:
+      - ./api2/logs:/app/logs
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
