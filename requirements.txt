@@ -6,6 +6,7 @@ Pydantic
 pandas
 requests
 uvicorn
+aift
 # Optional dependencies for additional functionality
 # statsmodel
 # scikit-learn
