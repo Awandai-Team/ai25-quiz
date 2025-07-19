@@ -25,7 +25,7 @@ services:
         source: api2-data
         target: /logs
     ports:
-      - "8000:8000"
+      - "8002:8000"
     environment:
       - POSTGRES_NAME=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}

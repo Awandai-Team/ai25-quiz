@@ -1,6 +1,26 @@
+"""
+================================================================================
+ Component API2 - Service API1's request
+================================================================================
+
+ Description:
+ ------------
+
+Responsibilities:
+ -----------------
+ - Define data models using Pydantic for strict validation and serialization.
+ - Expose a RESTful HTTP endpoint to send structured payloads.
+ - Act as a transport client to API2, sending validated data over HTTP or gRPC.
+
+ Usage:
+ ------
+ Run this component as part of a FastAPI server or include in a larger system.
+
+"""
 from fastapi import FastAPI
 import logging
 import os
+from pydantic import BaseModel
 from logging.handlers import RotatingFileHandler
 
 """ **** ตั้งค่า Logger ****"""
@@ -27,9 +47,16 @@ logger.addHandler(handler)
 
 app = FastAPI()  # สร้างเเอปฟลิเคชัน FastAPI
 
+class Payload(BaseModel):
+    name: str
+
+@app.get("/v1/chat-response")
+def chat_response_txt(): # provides A.I.
+    logger.info("Request received.")
+    return {1:1}
 
 @app.get("/health")  # สร้าง endpoint ไปที่ path "/health"
-def read_root():
+def check_status():
 
     # สั่งให้บันทึก Log
     logger.info("Request received. Sending response.")
