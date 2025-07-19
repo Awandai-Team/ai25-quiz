@@ -1,6 +1,6 @@
 fastapi
 flask
-protobuff==6.3.1
+protobuff>=6
 Pydantic
 pandas
 statsmodel
