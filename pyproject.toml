@@ -1,5 +1,4 @@
 [tool.pytest.ini_options]
-junit-xml = test_report.xml
 testpaths = [
     "tests",
     "client",
