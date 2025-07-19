@@ -101,4 +101,6 @@ logs/
 
 # Web
 
-The web layer can use Node.js or Django or PHP or Java. The web component provides session and authetication for end-user. See [instruction](master/web/README.md).
+1. Run Terminal: docker-compose up --build -d
+2. Go to Browser: http://localhost:8080
+
