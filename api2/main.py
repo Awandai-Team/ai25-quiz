@@ -1,5 +1,26 @@
+"""
+================================================================================
+ Component API2 - Service API1's request
+================================================================================
+
+ Description:
+ ------------
+ Uses AIFT library and GPT2 for content generation.
+
+Responsibilities:
+ -----------------
+ - Provide movie recommendation service
+ - Provide showtime schedule
+
+ Usage:
+ ------
+ Run this component as part of a FastAPI server or include in a larger system.
+
+"""
+from fastapi import FastAPI
 import logging
 import os
+from pydantic import BaseModel
 from logging.handlers import RotatingFileHandler
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -53,6 +74,13 @@ def get_data(request: Request):
     logger.info(f"API 2: Sending response: {response_data}")
     return response_data
 
+class Payload(BaseModel):
+    name: str
+
+@app.get("/v1/chat-response")
+def chat_response_txt(): # provides A.I.
+    logger.info("Request received.")
+    return {1:1}
 
 @app.get("/logs")
 def get_logs():
@@ -71,7 +99,6 @@ def get_logs():
         return JSONResponse(
             status_code=500, content={"error": "Could not read log file."}
         )
-
 
 @app.delete("/logs", status_code=204)
 def clear_logs():
