@@ -5,12 +5,12 @@
 
  Description:
  ------------
+ Uses AIFT library and GPT2 for content generation.
 
 Responsibilities:
  -----------------
- - Define data models using Pydantic for strict validation and serialization.
- - Expose a RESTful HTTP endpoint to send structured payloads.
- - Act as a transport client to API2, sending validated data over HTTP or gRPC.
+ - Provide movie recommendation service
+ - Provide showtime schedule
 
  Usage:
  ------
