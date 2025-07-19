@@ -26,6 +26,19 @@ docker ps
 | RDBMS / Persistent-Layer |    | Database service        |
 
 
+### Example/Endpoint
+
+Docker Compose deployment provides following endpoints:
+
+* API1
+** localhost:8001/v1/foo
+** localhost:8001/v1/bar
+** localhost:8001/v1/call-api2
+* API2
+** localhost:8002/docs
+** localhost:8002/health
+** localhost:8002/v1/chat-response
+
 # Test
 
 To test this deployment.
