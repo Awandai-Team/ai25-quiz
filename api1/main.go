@@ -81,7 +81,7 @@ func callAPI2(w http.ResponseWriter, r *http.Request) {
     log.Printf("API1: Making request to API2")
     
     // Make GET request to API2
-    resp, err := http.Get("http://api2:8000/items/42?delay=1")
+    resp, err := http.Get("http://api2:8000/health")
     if err != nil {
         log.Printf("Error calling API2: %v", err)
         http.Error(w, "Error calling API2", http.StatusInternalServerError)
