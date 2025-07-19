@@ -21,10 +21,23 @@ docker ps
 |------------------------|------|-------------------------|
 | API 1                  | 8001 | Backend API service     |
 | API 2                  | 8002 | Backend API service     |
-| Web / Middleware       | 8080 | Web server or gateway   |
+| Web / Middleware       | 80xx | Web server or gateway   |
 | Caching / Front-end    |      | Cache layer or frontend |
 | RDBMS / Persistent-Layer |    | Database service        |
 
+
+### Example/Endpoint
+
+Docker Compose deployment provides following endpoints:
+
+* API1
+** localhost:8001/v1/foo
+** localhost:8001/v1/bar
+** localhost:8001/v1/call-api2
+* API2
+** localhost:8002/docs
+** localhost:8002/health
+** localhost:8002/v1/chat-response
 
 # Test
 
@@ -39,11 +52,11 @@ pytest
 
 ## API 1
 
-* Go or Flask. This solution provides Go and Flask reference implementation. Request from HTTP is logged to [logs/api1.log]()
+* Go (and Flask) reference implementation. Request to this HTTP endpoint is logged to [logs/api1.log]()
 
 
 ```
-cd api1
+cd api1/
 ```
 
 Flask
@@ -62,12 +75,13 @@ go run main.go
 
 ## API 2
 
+* FastAPI reference implementation. Request to this HTTP endpoint is logged to [logs/api2.log]()
+
+
 ```
 python3 -m pip install fastapi[standard]
+uvicorn main:app --reload --host "0.0.0.0" --port "8000"
 ```
-
-Documentation at http://127.0.0.1:8002/docs
-
 
 
 # Logging
@@ -83,8 +97,6 @@ logs/
   db.log
   inference.log
   hourly.log
-
-
 ```
 
 # Web

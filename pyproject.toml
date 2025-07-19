@@ -1,5 +1,9 @@
 [tool.pytest.ini_options]
-# pytest --junit-xml=data/test_report.xml
+testpaths = [
+    "tests",
+    "client",
+]
+
 
 addopts = [
     "--import-mode=importlib",
@@ -7,4 +11,4 @@ addopts = [
     "--junit-xml=test_report.xml"
 
 ]
-pythonpath = "src"
+pythonpath = "."
