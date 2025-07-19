@@ -1,0 +1,27 @@
+### Test API1 (Go/Flask) - Health Check
+GET http://localhost:8080/health
+Accept: application/json
+
+###
+
+### Test API1 - Authenticated Request
+GET http://localhost:8080/api/v1/quiz
+Authorization: Bearer <your_token_here>
+Accept: application/json
+
+###
+
+### Test API2 (FastAPI) - Health Check
+GET http://localhost:8000/health
+Accept: application/json
+
+###
+
+### Test API2 - Submit Quiz Answer
+POST http://localhost:8000/api/v1/answer
+Content-Type: application/json
+
+{
+  "question_id": 123,
+  "answer": "B"
+}
