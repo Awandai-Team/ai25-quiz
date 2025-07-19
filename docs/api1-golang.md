@@ -32,6 +32,16 @@ curl 127.0.0.1:8001/v1/foo
 foo
 ```
 
+Test 3:
+```
+curl http://localhost:8001/v1/call-api2
+{
+    "api1_message": "Hello from API1 (Go)",
+    "api2_response": {"Hello": "World"},
+    "timestamp": "2024-01-15T10:30:45Z"
+}
+```
+
 ## Add Logging
 
 ```
