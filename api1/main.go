@@ -1,123 +1,141 @@
 package main
 
 import (
-    "fmt"
-    "io"
-    "log"
-    "net/http"
-    "strings"
-    "time"
+	"encoding/json"
+	"io"
+	"log"
+	"net/http"
+	"os"
+	"strings"
+
+	"github.com/rs/cors"
 )
 
-// Dummy token for demonstration
-const validToken = "mysecrettoken"
+func setupGlobalLogger() {
+	if err := os.MkdirAll("logs", 0755); err != nil {
+		log.Fatalf("error creating log directory: %v", err)
+	}
 
+	logFile, err := os.OpenFile("logs/api1.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening log file: %v", err)
+	}
 
-// Logging middleware
-func LoggingMiddleware(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        start := time.Now()
-        log.Printf("Started %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-        next.ServeHTTP(w, r)
-        duration := time.Since(start)
-        log.Printf("Completed %s in %v", r.URL.Path, duration)
-    })
+	multiWriter := io.MultiWriter(os.Stdout, logFile)
+	log.SetOutput(multiWriter)
+	log.Println("Logger initialized for API 1 (Go)")
 }
 
-// Authentication middleware
-func AuthMiddleware(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        authHeader := r.Header.Get("Authorization")
-        if !strings.HasPrefix(authHeader, "Bearer ") || strings.TrimPrefix(authHeader, "Bearer ") != validToken {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
-            return
-        }
-        next.ServeHTTP(w, r)
-    })
+func logsHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		getLogs(w, r)
+	case http.MethodDelete:
+		clearLogs(w, r)
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
 }
 
-// Handlers
-func publicHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "This is a public endpoint: %s\n", r.URL.Path)
+func getLogs(w http.ResponseWriter, r *http.Request) {
+	log.Println("API 1: Log file requested.")
+	logFilePath := "logs/api1.log"
+
+	fileBytes, err := os.ReadFile(logFilePath)
+	if err != nil {
+		log.Printf("Error reading log file: %v", err)
+		http.Error(w, "Could not read log file.", http.StatusInternalServerError)
+		return
+	}
+
+	lines := strings.Split(strings.TrimSpace(string(fileBytes)), "\n")
+	start := 0
+	if len(lines) > 50 {
+		start = len(lines) - 50
+	}
+
+	if len(lines) == 1 && lines[0] == "" {
+		lines = []string{}
+	}
+
+	response := map[string][]string{
+		"logs": lines[start:],
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
-func privateHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "This is a protected endpoint: %s\n", r.URL.Path)
+func clearLogs(w http.ResponseWriter, r *http.Request) {
+	log.Println("API 1: Clear log file requested.")
+	logFilePath := "logs/api1.log"
+
+	if err := os.Truncate(logFilePath, 0); err != nil {
+		log.Printf("Error clearing log file: %v", err)
+		http.Error(w, "Could not clear log file.", http.StatusInternalServerError)
+		return
+	}
+
+	log.Println("API 1: Log file cleared successfully.")
+	w.WriteHeader(http.StatusNoContent)
 }
 
-func logging(f http.HandlerFunc) http.HandlerFunc {
-    return func(w http.ResponseWriter, r *http.Request) {
-        log.Println(r.URL.Path)
-        f(w, r)
-    }
-}
+func callAPI2Handler(w http.ResponseWriter, r *http.Request) {
+	log.Println("API 1: Received request to call API 2.")
 
-func foo(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintln(w, "foo")
-    start := time.Now()
-    log.Printf("Started %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-    duration := time.Since(start)
-    log.Printf("Completed %s in %v", r.URL.Path, duration)
-}
+	api2URL := os.Getenv("API2_URL")
+	if api2URL == "" {
+		api2URL = "http://api2:8002"
+	}
+	requestURL := api2URL + "/v1/data"
 
-func bar(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintln(w, "bar")
-    start := time.Now()
-    log.Printf("Started %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-    duration := time.Since(start)
-    // Authentication
-    // http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-    //   authHeader := r.Header.Get("Authorization")
-    //   if (!strings.HasPrefix(authHeader, "Bearer ") || strings.TrimPrefix(authHeader, "Bearer ") != validToken) {
-    //       http.Error(w, "Unauthorized", http.StatusUnauthorized)
-    //   }
-    // }
-    log.Printf("Completed %s in %v", r.URL.Path, duration)
-}
+	log.Printf("API 1: Calling API 2 at %s", requestURL)
+	resp, err := http.Get(requestURL)
+	if err != nil {
+		log.Printf("API 1: Error calling API 2: %v", err)
+		http.Error(w, "Failed to communicate with API 2", http.StatusBadGateway)
+		return
+	}
+	defer resp.Body.Close()
 
-func callAPI2(w http.ResponseWriter, r *http.Request) {
-    start := time.Now()
-    log.Printf("Started %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
-    log.Printf("API1: Making request to API2")
-    
-    // Make GET request to API2
-    resp, err := http.Get("http://api2:8000/health")
-    if err != nil {
-        log.Printf("Error calling API2: %v", err)
-        http.Error(w, "Error calling API2", http.StatusInternalServerError)
-        return
-    }
-    defer resp.Body.Close()
-    
-    // Read response body
-    body, err := io.ReadAll(resp.Body)
-    if err != nil {
-        log.Printf("Error reading API2 response: %v", err)
-        http.Error(w, "Error reading API2 response", http.StatusInternalServerError)
-        return
-    }
-    
-    // Return combined response
-    w.Header().Set("Content-Type", "application/json")
-    fmt.Fprintf(w, `{
-        "api1_message": "Hello from API1 (Go)",
-        "api2_response": %s,
-        "timestamp": "%s"
-    }`, string(body), time.Now().Format(time.RFC3339))
-    
-    log.Printf("API1: Successfully called API2 and returned response")
-    duration := time.Since(start)
-    log.Printf("Completed %s in %v", r.URL.Path, duration)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("API 1: Error reading response from API 2: %v", err)
+		http.Error(w, "Error reading response from API 2", http.StatusInternalServerError)
+		return
+	}
+
+	log.Printf("API 1: Received successful response from API 2.")
+
+	var dataFromAPI2 interface{}
+	json.Unmarshal(body, &dataFromAPI2)
+
+	finalResponse := map[string]interface{}{
+		"message":              "Successfully called API 2 from Go",
+		"response_from_api2": dataFromAPI2,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(finalResponse)
 }
 
 func main() {
-    http.HandleFunc("/v1/foo", logging(foo))
-    http.HandleFunc("/v1/bar", logging(bar))
+	setupGlobalLogger()
 
-    // This endpoint calls API2 and returns combined result from API1 and API2 
-    http.HandleFunc("/v1/call-api2", logging(callAPI2))
+	mux := http.NewServeMux()
+	mux.HandleFunc("/v1/call-api2", callAPI2Handler)
+	mux.HandleFunc("/logs", logsHandler)
 
-    fmt.Println("Server running on http://localhost:8001")
-    fmt.Println("Hit Ctrl+C to kill the server")
-    log.Fatal(http.ListenAndServe(":8001", nil))
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"*"},
+	})
+
+	handler := c.Handler(mux)
+
+	log.Println("API 1 (Go) starting on port 8001")
+	if err := http.ListenAndServe(":8001", handler); err != nil {
+		log.Fatalf("could not start server: %v", err)
+	}
 }

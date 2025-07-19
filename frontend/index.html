@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Communication Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Anuphan", sans-serif;
+        background-color: #f9fafb;
+        color: #1f2937;
+      }
+      .log-container {
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        height: 450px;
+        overflow-y: auto;
+      }
+      .log-entry {
+        border-bottom: 1px solid #f3f4f6;
+        padding: 0.75rem 0.25rem;
+      }
+      .log-entry:last-child {
+        border-bottom: none;
+      }
+      .raw-log {
+        font-family: monospace;
+        font-size: 0.8rem;
+        color: #6b7280;
+        word-break: break-all;
+      }
+      .log-explanation {
+        font-size: 0.95rem;
+        color: #1f2937;
+        margin-top: 0.25rem;
+      }
+      .result-box {
+        font-family: monospace;
+        background-color: #111827;
+        color: #e5e7eb;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        white-space: pre;
+        overflow-x: auto;
+      }
+      .action-button {
+        background-color: #111827;
+        color: #ffffff;
+        transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+      }
+      .action-button:hover {
+        background-color: #374151;
+      }
+      .action-button:active {
+        transform: scale(0.98);
+      }
+      .action-button:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <div class="container mx-auto max-w-5xl p-5 md:p-10">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-2">API Communication Demo</h1>
+        <p class="text-lg text-gray-500 mb-8">
+          Tracing the interaction between two services (Go & Python) on Docker.
+        </p>
+        <button
+          id="callApiButton"
+          class="action-button font-bold py-3 px-8 rounded-full text-lg shadow-lg"
+        >
+          <span id="button-text">▶︎ Start Test</span>
+        </button>
+      </div>
+
+      <div class="mb-12">
+        <h2 class="text-2xl font-semibold mb-3">Step 1: Final Result</h2>
+        <p class="text-gray-600 mb-4">
+          This is the final JSON response from API 1 after it successfully
+          communicates with API 2.
+        </p>
+        <div id="response-container" class="result-box">
+          <pre id="responseText">{ "status": "Awaiting test..." }</pre>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-3">
+          Step 2: Tracing the Operation (Logs)
+        </h2>
+        <p class="text-gray-600 mb-4">
+          This is the "conversation" happening behind the scenes. Let's break
+          down what each line means.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-xl font-semibold mb-3 text-blue-700">
+              API 1 (Go) Side
+            </h3>
+            <div id="api1-log" class="log-container">
+              <div class="log-entry">
+                <div class="log-explanation text-gray-400">
+                  Please click "Start Test" to see the logs.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold mb-3 text-green-700">
+              API 2 (Python) Side
+            </h3>
+            <div id="api2-log" class="log-container">
+              <div class="log-entry">
+                <div class="log-explanation text-gray-400">...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const callApiButton = document.getElementById("callApiButton");
+      const buttonText = document.getElementById("button-text");
+      const responseText = document.getElementById("responseText");
+      const api1LogContainer = document.getElementById("api1-log");
+      const api2LogContainer = document.getElementById("api2-log");
+
+      const API1_BASE_URL = "http://localhost:8001";
+      const API2_BASE_URL = "http://localhost:8002";
+
+      function getExplanationForLog(logString) {
+        if (logString.includes("Log file cleared"))
+          return "🧹 Logs Cleared: Ready for a new test.";
+        if (logString.includes("starting on port"))
+          return "▶️ Service Started: Ready to work.";
+        if (logString.includes("Received request to call API 2"))
+          return "🙋‍♂️ Request Received: Got the request from the user.";
+        if (logString.includes("Calling API 2 at"))
+          return "🏃‍♂️ Forwarding: Communicating with API 2.";
+        if (logString.includes("Received successful response"))
+          return "✅ Success: Received a response from API 2.";
+        if (logString.includes("Error calling API 2"))
+          return "❌ Error: Failed to communicate with API 2.";
+        if (logString.includes("Received request for /v1/data"))
+          return "👨‍🍳 Request Received: Got the request from API 1.";
+        if (logString.includes("Sending response"))
+          return "🍳 Processing: Preparing data to send back to API 1.";
+        if (logString.includes("Log file requested"))
+          return "📝 Checking: The web page is fetching the latest logs.";
+        return "General activity...";
+      }
+
+      function renderLogsWithExplanations(container, logs) {
+        if (!logs || logs.length === 0) {
+          container.innerHTML =
+            '<div class="log-entry"><div class="log-explanation text-gray-400">No activity yet.</div></div>';
+          return;
+        }
+        const logHtml = logs
+          .map((log) => {
+            const explanation = getExplanationForLog(log);
+            return `<div class="log-entry"><div class="log-explanation">${explanation}</div><div class="raw-log">${log}</div></div>`;
+          })
+          .join("");
+        container.innerHTML = logHtml;
+        container.scrollTop = container.scrollHeight;
+      }
+
+      function setLoadingState(isLoading) {
+        callApiButton.disabled = isLoading;
+        buttonText.textContent = isLoading
+          ? "Processing..."
+          : "▶︎ Run Test Again";
+      }
+
+      function formatJsonResponse(data) {
+        return JSON.stringify(data, null, 2);
+      }
+
+      async function clearAllLogs() {
+        try {
+          await Promise.all([
+            fetch(`${API1_BASE_URL}/logs`, { method: "DELETE" }),
+            fetch(`${API2_BASE_URL}/logs`, { method: "DELETE" }),
+          ]);
+          console.log("Log clear requests sent successfully.");
+        } catch (error) {
+          console.error("An error occurred while clearing logs:", error);
+        }
+      }
+
+      callApiButton.addEventListener("click", async () => {
+        setLoadingState(true);
+        responseText.textContent = '{ "status": "Initializing..." }';
+
+        await clearAllLogs();
+
+        renderLogsWithExplanations(api1LogContainer, []);
+        renderLogsWithExplanations(api2LogContainer, []);
+
+        try {
+          const response = await fetch(`${API1_BASE_URL}/v1/call-api2`);
+          const data = await response.json();
+          if (!response.ok)
+            throw new Error(data.error || `HTTP Error ${response.status}`);
+          responseText.textContent = formatJsonResponse(data);
+        } catch (error) {
+          console.error("Error calling API:", error);
+          responseText.textContent = formatJsonResponse({
+            error: error.message,
+          });
+        } finally {
+          setLoadingState(false);
+          fetchLogs();
+        }
+      });
+
+      async function fetchLogs() {
+        try {
+          const r1 = await fetch(`${API1_BASE_URL}/logs`);
+          const d1 = await r1.json();
+          renderLogsWithExplanations(api1LogContainer, d1.logs);
+        } catch (e) {
+          renderLogsWithExplanations(api1LogContainer, [
+            "Error fetching logs.",
+          ]);
+        }
+        try {
+          const r2 = await fetch(`${API2_BASE_URL}/logs`);
+          const d2 = await r2.json();
+          renderLogsWithExplanations(api2LogContainer, d2.logs);
+        } catch (e) {
+          renderLogsWithExplanations(api2LogContainer, [
+            "Error fetching logs.",
+          ]);
+        }
+      }
+    </script>
+  </body>
+</html>
