@@ -1,17 +1,14 @@
 # ai25-quiz: Awandai Team
 
+Team: Awandai  ( @tawanNophaket , @Dai5onda , @chayapan )
+Solution: Quiz
 
-AWS Cloud Shell https://aws.amazon.com/cloudshell/faqs/#topic-1
-https://aws.amazon.com/free/
-https://avatars.githubusercontent.com/u/2232217?s=200&v=4 
 
-Google Cloud Platform https://cloud.google.com/free
-https://avatars.githubusercontent.com/u/2810941?s=200&v=4
 
-Azure Bastion
-https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png
-https://azure.microsoft.com/en-us/products/azure-bastion
+การแข่งขัน Hackathon 2025: From AI Model to Service on AI FOR THAI
+https://aift.hackathon2025.ai.in.th/
 
+## Deploy
 
 Start API service.
 
@@ -29,9 +26,15 @@ docker ps
 | RDBMS / Persistent-Layer |    | Database service        |
 
 
-TODO:
+# Test
 
-How-to Test ...
+To test this deployment.
+
+```
+docker-compose up -d
+docker-compose ps
+pytest
+```
 
 
 ## API 1
@@ -66,9 +69,6 @@ python3 -m pip install fastapi[standard]
 Documentation at http://127.0.0.1:8002/docs
 
 
-## Web
-
-The web layer. Node.js or Django or PHP. This provides user session to interact with the service.
 
 # Logging
 
@@ -83,25 +83,10 @@ logs/
   db.log
   inference.log
   hourly.log
+
+
 ```
 
-# About
+# Web
 
-การแข่งขัน Hackathon 2025: From AI Model to Service on AI FOR THAI
-https://aift.hackathon2025.ai.in.th/
-
-
-Checklist per quiz  
-https://docs.google.com/document/d/14XtBFMgx39MWxpmtZ9_s5qtfIMzIz8ezCy6Wqeurt4Y/edit?tab=t.0
-
-Question/Task:
-
-- [x] จงสร้าง API 2 ตัว โดยมีเงื่อนไขดังนี้
-  - [x] สร้างโดยภาษาใดก็ได้
-  - [x] Listen ที่ port ใดก็ได้
-  - [ ] User Request ไปที่ API1 แล้ว API1 request ต่อไปที่ API2 แล้วนำคำตอบส่งกลับไปที่ User
-  - [ ] มีการ Print logs ทั้งบน API1 และ API2
-  - [x] endpoint ของ API และคำตอบ จะเป็นอะไรก็ได้ เช่น แค่ print "Hello World"
-  - [ ] Deploy ทุกอย่างบน `docker-compose.yml`
-  - [ ] ส่งงานผ่าน GitHub หรือ GitLab และเปิด public access
-  - [?] เขียน `README.md` บอกวิธี deploy และทดสอบ
+The web layer can use Node.js or Django or PHP or Java. The web component provides session and authetication for end-user. See [instruction](master/web/README.md).

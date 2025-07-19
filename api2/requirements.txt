@@ -1,0 +1,2 @@
+fastapi==0.104.1 # Frame Work หลักสำหรับสร้าง API
+uvicorn==0.24.0.post1 # Web Server Gateway Interface สำหรับรันเเอป FastAPI

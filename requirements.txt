@@ -1,2 +1,13 @@
+pytest
+fastapi
+flask
+lightprotobuf
 Pydantic
-protobuff
+pandas
+requests
+uvicorn
+# Optional dependencies for additional functionality
+# statsmodel
+# scikit-learn
+# numpy
+# scipy
