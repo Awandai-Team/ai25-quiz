@@ -1,5 +1,10 @@
 [tool.pytest.ini_options]
-pytest --junit-xml=test_report.xml
+junit-xml = test_report.xml
+testpaths = [
+    "tests",
+    "client",
+]
+
 
 addopts = [
     "--import-mode=importlib",
