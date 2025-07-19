@@ -1,5 +1,5 @@
 ### Test API1 (Go/Flask) - Health Check
-GET http://localhost:8080/health
+GET http://localhost:8001/health
 Accept: application/json
 
 ###
@@ -12,7 +12,7 @@ Accept: application/json
 ###
 
 ### Test API2 (FastAPI) - Health Check
-GET http://localhost:8000/health
+GET http://localhost:8002/health
 Accept: application/json
 
 ###

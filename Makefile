@@ -1,9 +1,15 @@
 # Makefile
 
-IMAGE_API1=ai25-quiz-api1
-IMAGE_NAME=ai25-quiz-api2
+API1_IMAGE=ai25-quiz-api1
+API2_IMAGE=ai25-quiz-api2
 
 build-image:
-	docker build -t $(IMAGE_API1) api1/.
-	docker build -t $(IMAGE_NAME) api2/.
+	docker build -t $(API1_IMAGE) api1/.
+	docker build -t $(API2_IMAGE) api2/.
+
+# run-api1:
+#	docker run -v "$(pwd)"/logs:/logs --rm -it ai25-quiz-api1 sh
+
+# run-api2:
+#	docker run -v "$(pwd)"/logs:/logs --rm -it ai25-quiz-api2 sh
 

@@ -7,6 +7,8 @@ https://chatgpt.com/share/687b87ec-e37c-8013-bf72-b0d790d8c728
 
 ## Sample Data
 
+**client/data-example/**
+
 * prompt.json - three questions to get user's preference
 * movies.json - list of movies and information  
 * casts.json - movie casts  
