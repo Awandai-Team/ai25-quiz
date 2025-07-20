@@ -1,4 +1,5 @@
 from flask import Flask, request
+import argparse
 import logging
 import os
 
@@ -30,5 +31,14 @@ def index():
 def data():
     return {"status": "success"}
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Movie LLM')
+    
+    parser.add_argument('--debug', action='store_true',
+                       help='Run in debug mode')
+    
+    return parser.parse_args()
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    args = parse_arguments()
+    app.run(debug=args.debug)
