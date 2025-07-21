@@ -12,6 +12,27 @@ services:
     networks:
       - app-network
 
+  llm-app:  
+    container_name: llm_app
+    build:
+      context: ./api1/llm  
+      dockerfile: Dockerfile  # Use Dockerfile.gpu for GPU support
+    ports:
+      - "5050:5050" 
+    volumes:
+      - ./api1/llm/logs:/app/logs
+      - ~/.cache/huggingface:/root/.cache/huggingface
+      - ./client/data-example:/app/data
+    environment:
+      - HF_HOME=/root/.cache/huggingface
+      - MODEL_NAME=Qwen/Qwen3-0.6B
+      - JSON_DATA_PATH=/app/data/movies.json
+      - DEVICE_MAP=auto  # Options: 'auto', 'cpu', 'gpu'
+      - TORCH_DTYPE=auto  # Options: 'auto', 'float16', 'float32', etc.
+      - AIFT_API_KEY=${AIFT_API_KEY}
+    networks:
+      - app-network
+
   api1:
     container_name: api1_go
     build:
