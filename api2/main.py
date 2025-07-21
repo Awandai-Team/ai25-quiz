@@ -9,10 +9,6 @@ from pydantic import BaseModel
 log_formatter = logging.Formatter(
     "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
-log_file = os.path.join(LOG_DIR, "api2.log")
-
-file_handler = RotatingFileHandler(log_file, maxBytes=1024 * 1024 * 5, backupCount=5)
-file_handler.setFormatter(log_formatter)
 
 LOG_DIR = "logs"
 if not os.path.exists(LOG_DIR):
@@ -21,6 +17,11 @@ if not os.path.exists(LOG_DIR):
 log_formatter = logging.Formatter(
     "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
+
+log_file = os.path.join(LOG_DIR, "api2.log")
+
+file_handler = RotatingFileHandler(log_file, maxBytes=1024 * 1024 * 5, backupCount=5)
+file_handler.setFormatter(log_formatter)
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
