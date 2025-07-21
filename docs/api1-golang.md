@@ -1,8 +1,13 @@
-# Development Note
+# API 1: Go Service
+
+![](../docs/api-arch.png)
 
 
 ## Go installation on development machine
 
+See instruction at https://go.dev/doc/install
+
+Check go version installed.
 ```
 go version
 go version go1.15.7 darwin/amd64
@@ -42,8 +47,11 @@ curl http://localhost:8001/v1/call-api2
 }                                
 ```
 
-## Add Logging
+### Packages for Request Logging
 
 ```
 go get gopkg.in/natefinch/lumberjack.v2
 ```
+
+
+
