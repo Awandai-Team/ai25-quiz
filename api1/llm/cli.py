@@ -38,6 +38,7 @@ def interactive():
             click.echo("Goodbye!")
             break
         response, is_question = engine.query_llm(prompt, messages=messages)
+        print()
         if is_question:
             click.echo("(Model needs more details—answer the question above to continue.)")
         else:

@@ -6,6 +6,8 @@ import re
 import threading
 from dotenv import load_dotenv
 from transformers import pipeline, TextIteratorStreamer
+import aift  # For AIFT API
+from aift import setting, nlp  # Import setting and nlp for tag.analyze
 
 load_dotenv()
 logging.basicConfig(level=os.getenv('LOG_LEVEL', 'INFO'))
@@ -17,7 +19,15 @@ os.environ['HF_HOME'] = os.getenv('HF_HOME', '~/.cache/huggingface')
 class LLMEngine:
     def __init__(self):
         model_name = os.getenv('MODEL_NAME', 'Qwen/Qwen3-0.6B')
+        aift_api_key = os.getenv('AIFT_API_KEY')  # Get from env (add to .env: AIFT_API_KEY=your_key)
+        if not aift_api_key:
+            raise ValueError("AIFT_API_KEY not set in environment variables")
+        
         try:
+            # Set AIFT API key
+            setting.set_api_key(aift_api_key)
+            logger.info("AIFT API key set successfully")
+
             # Get device configuration from environment
             device_map = os.getenv('DEVICE_MAP', 'auto')
             torch_dtype = os.getenv('TORCH_DTYPE', 'auto')
@@ -51,8 +61,8 @@ class LLMEngine:
 
     def build_full_prompt(self, prompt: str, messages: list, context: str, reasonEnabled: bool) -> list:
         """Build structured prompt with system instructions."""
-        system_prompt = """You are a movie recommender. If the user's request is vague (e.g., no genre or type specified), ask for more details using <question> tag. If you have enough info, recommend directly using <recommendation> tag.
-Think step-by-step in <think>: 1. Check if enough details (e.g., genre). 2. If not, ask in <question>. 3. If yes, search data and suggest 1-2 with reasons. Keep it short. Don't ask for more info unless necessary.
+        system_prompt = """You are a movie recommender. If the user's request is vague (e.g., no genre or type specified), ask for more details using <question> tag. If you have enough info, recommend directly using <recommendation> tag, mentioning relevant tags from the data to match the request.
+Think step-by-step in <think>: 1. Check if enough details (e.g., genre). 2. If not, ask in <question>. 3. If yes, search data and suggest 1-2 with reasons, including their tags. Keep it short. Don't ask for more info unless necessary.
 Use this data: {context}"""
 
         if not messages:
@@ -77,10 +87,10 @@ Use this data: {context}"""
         keywords = re.findall(r'\w+', prompt.lower())
         relevant_movies = [movie for movie in self.json_data if any(k in str(movie).lower() for k in keywords)]
 
-        # Format relevant data for context
+        # Format relevant data for context (include tags)
         if relevant_movies:
-            data_string = "\n".join([f"- {movie.get('Title', 'Unknown')} by {movie.get('Director', 'unknown')} (Release: {movie.get('Release Date', 'unknown')}, Age: {movie.get('Age Restriction', 'unknown')})" for movie in relevant_movies])
-            context = f"Relevant movies: \n{data_string}\nUse this to make recommendations."
+            data_string = "\n".join([f"- {movie.get('Title', 'Unknown')} by {movie.get('Director', 'unknown')} (Release: {movie.get('Release Date', 'unknown')}, Age: {movie.get('Age Restriction', 'unknown')}, Tags: {', '.join(movie.get('tags', ['No tags']))})" for movie in relevant_movies])
+            context = f"Relevant movies: \n{data_string}\nUse this to make recommendations, mentioning tags that match the request."
         else:
             context = "No matching movies. Suggest generally or ask for more details."
 
@@ -163,7 +173,7 @@ def parse_structured_content(outputs):
     return parsed
 
 def load_json_data() -> list:
-    """Load movie data from JSON file."""
+    """Load movie data from JSON file and generate tags using AIFT API."""
     json_path = os.getenv('JSON_DATA_PATH')
     if not json_path or not os.path.exists(json_path):
         logger.warning("JSON path not set or file missing. Returning empty list.")
@@ -172,8 +182,18 @@ def load_json_data() -> list:
     try:
         with open(json_path, 'r') as f:
             data = json.load(f)
-        logger.info(f"Loaded {len(data)} movies from {json_path}")
+        
+        # Generate tags for each movie using AIFT (assume 'synopsis' field exists; adjust if different)
+        for movie in data:
+            synopsis = movie.get('synopsis', '')  # Get synopsis (add to your JSON if missing; fallback to title if empty)
+            if synopsis:
+                tags = nlp.tag.analyze(synopsis, numtag=5)  # Generate 5 tags
+                movie['tags'] = tags  # Add to movie dict
+            else:
+                movie['tags'] = []  # No synopsis, empty tags
+        
+        logger.info(f"Loaded and tagged {len(data)} movies from {json_path}")
         return data
     except Exception as e:
-        logger.error(f"Failed to load JSON: {e}")
+        logger.error(f"Failed to load or tag JSON: {e}")
         return []

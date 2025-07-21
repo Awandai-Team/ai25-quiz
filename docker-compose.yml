@@ -29,6 +29,7 @@ services:
       - JSON_DATA_PATH=/app/data/movies.json
       - DEVICE_MAP=auto  # Options: 'auto', 'cpu', 'gpu'
       - TORCH_DTYPE=auto  # Options: 'auto', 'float16', 'float32', etc.
+      - AIFT_API_KEY=${AIFT_API_KEY}
     networks:
       - app-network
 
